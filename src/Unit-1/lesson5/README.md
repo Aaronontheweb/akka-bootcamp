@@ -5,7 +5,7 @@ Mmm, that was nice.
 
 Okay, let's get on with it!
 
-In this lesson, we're going to learn how to decouple our actors from each other a bit and a new way of communicating between actors: `ActorSelection`. This lesson is shorter than the previous ones, now that we've laid down a solid conceptual foundation.
+In this lesson, we're going to learn how to decouple our actors from each other a bit and a new way of communicating between actors: [`ActorSelection`](http://api.getakka.net/docs/stable/html/CC0731A6.htm "Akka.NET Stable API Docs - ActorSelection class"). This lesson is shorter than the previous ones, now that we've laid down a solid conceptual foundation.
 
 ## Key concepts / background
 `ActorSelection` is a natural extension of actor hierarchies, which we covered in the last lesson. Now that we understand that actors live in hierarchies, it begs the question: now that actors aren't all on the same level, does this change the way they communicate?
@@ -34,7 +34,7 @@ We think of `ActorSelection` as both a process and an object: the process of loo
 Always a great question, glad you asked! There are a number of benefits that `ActorSelection` gives you.
 
 #### Location transparency
-What location transparency actually means is that whenever you send a message to an actor, you don't need to know where they are within an actor system, which might span hundreds of computers. You don't care if your actors are all in one process or spread across 100 machines around the world. You just have to know that actors' address (its `ActorPath`).
+What [location transparency](http://getakka.net/docs/concepts/location-transparency) actually means is that whenever you send a message to an actor, you don't need to know where they are within an actor system, which might span hundreds of computers. You don't care if your actors are all in one process or spread across 100 machines around the world. You just have to know that actors' address (its `ActorPath`).
 
 Think of it like calling someone's cell phone number - you don't need to know that your friend Bob is in Seattle, Washington, USA in order to place a call to them. You just need to dial Bob's cell phone number and your cellular network provider will take care of the rest.
 

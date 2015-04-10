@@ -6,7 +6,7 @@ In this lesson, the code has changed a bit. The change is that the `ConsoleReade
 ## Key concepts / background
 ### `IActorRef`s
 #### What is an `IActorRef`?
-An `IActorRef` is a reference or handle to an actor. The purpose of an `IActorRef` is to support sending messages to an actor through the `ActorSystem`. You never talk directly to an actor—you send messages to its `IActorRef` and the `ActorSystem` takes care of delivering those messages for you.
+An [`IActorRef`](http://api.getakka.net/docs/stable/html/56C46846.htm "Akka.NET Stable API Docs - IActorRef") is a reference or handle to an actor. The purpose of an `IActorRef` is to support sending messages to an actor through the `ActorSystem`. You never talk directly to an actor—you send messages to its `IActorRef` and the `ActorSystem` takes care of delivering those messages for you.
 
 #### WTF? I don't actually talk to my actors? Why not?
 You do talk to them, just not directly :) You have to talk to them via the intermediary of the `ActorSystem`.
@@ -77,7 +77,7 @@ However, there are also some other `IActorRef`s available to you within the cont
 
 ### Props
 #### What are `Props`?
-Think of `Props` as a recipe for making an actor. Technically, `Props` is a configuration class that encapsulates all the information needed to make an instance of a given type of actor.
+Think of [`Props`](http://api.getakka.net/docs/stable/html/CA4B795B.htm "Akka.NET Stable API Documentation - Props class") as a recipe for making an actor. Technically, `Props` is a configuration class that encapsulates all the information needed to make an instance of a given type of actor.
 
 #### Why do we need `Props`?
 `Props` objects are shareable recipes for creating an instance of an actor. `Props` get passed to the `ActorSystem` to generate an actor for your use.
