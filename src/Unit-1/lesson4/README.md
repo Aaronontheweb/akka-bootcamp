@@ -189,7 +189,7 @@ public class MyActor : UntypedActor
         return new OneForOneStrategy(// or AllForOneStrategy
             maxNumberOfRetries: 10,
             duration: TimeSpan.FromSeconds(30),
-            decider: x =>
+            x =>
             {
                 // Maybe ArithmeticException is not application critical
                 // so we just ignore the error and keep going.
@@ -406,7 +406,7 @@ namespace WinTail
         /// <param name="e"></param>
         void OnFileError(object sender, ErrorEventArgs e)
         {
-            _tailActor.Tell(new TailActor.FileError(_fileNameOnly, e.GetException().Message), IActorRef.NoSender);
+            _tailActor.Tell(new TailActor.FileError(_fileNameOnly, e.GetException().Message), ActorRefs.NoSender);
         }
 
         /// <summary>
@@ -418,9 +418,9 @@ namespace WinTail
         {
             if (e.ChangeType == WatcherChangeTypes.Changed)
             {
-                // here we use a special IActorRef.NoSender
+                // here we use a special ActorRefs.NoSender
                 // since this event can happen many times, this is a little microoptimization
-                _tailActor.Tell(new TailActor.FileWrite(e.Name), IActorRef.NoSender);
+                _tailActor.Tell(new TailActor.FileWrite(e.Name), ActorRefs.NoSender);
             }
 
         }
@@ -670,7 +670,7 @@ protected override SupervisorStrategy SupervisorStrategy()
     return new OneForOneStrategy (
         10, // maxNumberOfRetries
         TimeSpan.FromSeconds(30), // duration
-        decider: x =>
+        x =>
         {
             //Maybe we consider ArithmeticException to not be application critical
             //so we just ignore the error and keep going.
