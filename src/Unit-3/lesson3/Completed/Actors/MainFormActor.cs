@@ -14,7 +14,7 @@ namespace GithubActors.Actors
 
         public class LaunchRepoResultsWindow
         {
-            public LaunchRepoResultsWindow(RepoKey repo, ActorRef coordinator)
+            public LaunchRepoResultsWindow(RepoKey repo, IActorRef coordinator)
             {
                 Repo = repo;
                 Coordinator = coordinator;
@@ -22,7 +22,7 @@ namespace GithubActors.Actors
 
             public RepoKey Repo { get; private set; }
 
-            public ActorRef Coordinator { get; private set; }
+            public IActorRef Coordinator { get; private set; }
         }
 
         #endregion

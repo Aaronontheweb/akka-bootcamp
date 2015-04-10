@@ -73,7 +73,7 @@ Time to meet HOCON.
 Akka.NET leverages a configuration format, called HOCON, to allow you to configure your Akka.NET applications with whatever level of granularity you want.
 
 #### What is HOCON?
-[HOCON (Human-Optimized Config Object Notation)](http://getakka.net/wiki/HOCON) is a flexible and extensible configuration format. It will allow you to configure everything from Akka.NET's `ActorRefProvider` implementation, logging, network transports, and more commonly - how individual actors are deployed.
+[HOCON (Human-Optimized Config Object Notation)](http://getakka.net/wiki/HOCON) is a flexible and extensible configuration format. It will allow you to configure everything from Akka.NET's `IActorRefProvider` implementation, logging, network transports, and more commonly - how individual actors are deployed.
 
 Values returned by HOCON are strongly typed (i.e. you can fetch out an `int`, a `Timespan`, etc).
 
@@ -142,7 +142,7 @@ Here's an example of using HOCON inside `App.config`:
             loglevel = ERROR
             # this config section will be referenced as akka.actor
             actor {
-              provider = "Akka.Remote.RemoteActorRefProvider, Akka.Remote"
+              provider = "Akka.Remote.RemoteIActorRefProvider, Akka.Remote"
               debug {
                   receive = on
                   autoreceive = on

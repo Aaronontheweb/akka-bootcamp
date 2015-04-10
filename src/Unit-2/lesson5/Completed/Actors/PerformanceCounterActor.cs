@@ -15,14 +15,14 @@ namespace ChartApp.Actors
         private readonly Func<PerformanceCounter> _performanceCounterGenerator;
         private PerformanceCounter _counter;
 
-        private readonly HashSet<ActorRef> _subscriptions;
+        private readonly HashSet<IActorRef> _subscriptions;
         private readonly CancellationTokenSource _cancelPublishing;
 
         public PerformanceCounterActor(string seriesName, Func<PerformanceCounter> performanceCounterGenerator)
         {
             _seriesName = seriesName;
             _performanceCounterGenerator = performanceCounterGenerator;
-            _subscriptions = new HashSet<ActorRef>();
+            _subscriptions = new HashSet<IActorRef>();
             _cancelPublishing = new CancellationTokenSource();
         }
 

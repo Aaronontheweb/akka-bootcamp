@@ -42,7 +42,7 @@ That being said, it's still possible to take advantage of `async` methods and me
 The [`PipeTo` pattern](https://github.com/akkadotnet/akka.net/blob/dev/src/core/Akka/Actor/PipeToSupport.cs) is a simple [extension method](https://msdn.microsoft.com/en-us/library/bb383977.aspx) built into Akka.NET that you can append to any `Task<T>` object.
 
 ```csharp
-public static Task PipeTo<T>(this Task<T> taskToPipe, ICanTell recipient, ActorRef sender = null)
+public static Task PipeTo<T>(this Task<T> taskToPipe, ICanTell recipient, IActorRef sender = null)
 ```
 
 ### `Task`s are just another source of messages
@@ -54,7 +54,7 @@ The `PipeTo` method takes an `ICanTell` object as a required argument, which tel
 
 Here are all of the Akka.NET classes that you can use with `ICanTell`:
 
-* `ActorRef` - a reference to an actor instance.
+* `IActorRef` - a reference to an actor instance.
 * `ActorSelection` - a selection of actors at a specified address. This is what gets returned whenever you look up an actor based on its path.
 
 Most of the time, you're going to want to have your actors pipe the results of a task back to themselves. Here's an example of a real-world use case for `PipeTo`, drawn from our **[official Akka.NET PipeTo code sample](https://github.com/petabridge/akkadotnet-code-samples/tree/master/PipeTo "Petabridge Akka.NET PipeTo code sample")**.
@@ -70,7 +70,7 @@ Receive<BeginProcessFeed>(feed =>
 
 [View the full source for this example.](https://github.com/petabridge/akkadotnet-code-samples/blob/master/PipeTo/src/PipeTo.App/Actors/FeedParserActor.cs#L70).
 
-Whenever you kick off a `Task<T>` and use `PipeTo` to deliver the results to some `ActorRef` or `ActorSelection`, here's how your actor is really processing its mailbox.
+Whenever you kick off a `Task<T>` and use `PipeTo` to deliver the results to some `IActorRef` or `ActorSelection`, here's how your actor is really processing its mailbox.
 
 ![Animation - Akka.NET actors processing messages asynchronously in their mailbox using PipeTo](images/how-akkadotnet-actors-receive-messages-async-pipeto.gif)
 
@@ -165,7 +165,7 @@ Receive<BeginProcessFeed>(feed =>
     _feedFactory.CreateFeedAsync(feed.FeedUri).PipeTo(senderClosure);
 });
 ```
-> NOTE: Assuming you're piping the result of the `Task` back to the same actor, you don't need to close over `Self` or `Parent`. Those `ActorRef`s will be the same when the `Task` returns. You just need to close over the state that is going to change by the time the `Task` completes and executes its continuation delegate.
+> NOTE: Assuming you're piping the result of the `Task` back to the same actor, you don't need to close over `Self` or `Parent`. Those `IActorRef`s will be the same when the `Task` returns. You just need to close over the state that is going to change by the time the `Task` completes and executes its continuation delegate.
 
 Now, let's get to work and use this powerful parallelism technique inside our actors!
 

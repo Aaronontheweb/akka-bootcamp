@@ -119,8 +119,8 @@ These are the various API calls you can make to schedule recurring messages.
 ```csharp
 public Task Schedule(TimeSpan initialDelay, TimeSpan interval, Action action);
 public Task Schedule(TimeSpan initialDelay, TimeSpan interval, Action action, CancellationToken cancellationToken);
-public Task Schedule(TimeSpan initialDelay, TimeSpan interval, ActorRef receiver, object message);
-public Task Schedule(TimeSpan initialDelay, TimeSpan interval, ActorRef receiver, object message, CancellationToken cancellationToken);
+public Task Schedule(TimeSpan initialDelay, TimeSpan interval, IActorRef receiver, object message);
+public Task Schedule(TimeSpan initialDelay, TimeSpan interval, IActorRef receiver, object message, CancellationToken cancellationToken);
 ```
 
 #### Overloads of `ScheduleOnce`
@@ -129,8 +129,8 @@ These are the various API calls you can make to schedule one-off messages.
 ```csharp
 public Task ScheduleOnce(TimeSpan initialDelay, Action action);
 public Task ScheduleOnce(TimeSpan initialDelay, Action action, CancellationToken cancellationToken);
-public Task ScheduleOnce(TimeSpan initialDelay, ActorRef receiver, object message);
-public Task ScheduleOnce(TimeSpan initialDelay, ActorRef receiver, object message, CancellationToken cancellationToken);
+public Task ScheduleOnce(TimeSpan initialDelay, IActorRef receiver, object message);
+public Task ScheduleOnce(TimeSpan initialDelay, IActorRef receiver, object message, CancellationToken cancellationToken);
 ```
 
 > **NOTE: THE `Scheduler` API is changing soon.** [The `Scheduler` API is going to be modified as part of the upcoming Akka.NET v1.0 release](https://github.com/akkadotnet/akka.net/issues/468).
@@ -143,13 +143,13 @@ It's actually very simple. Many people expect this to be very complicated and ar
 ```csharp
 public class PubActor : ReceiveActor {
 	// HashSet automatically eliminates duplicates
-	private HashSet<ActorRef> _subscribers;
+	private HashSet<IActorRef> _subscribers;
 
 	PubActor() {
-		_subscribers = new HashSet<ActorRef>();
+		_subscribers = new HashSet<IActorRef>();
 
 		Receive<Subscribe>(sub => {
-			_subscribers.Add(sub.ActorRef);
+			_subscribers.Add(sub.IActorRef);
 		});
 
 		Receive<MessageSubscribersWant>(message => {
@@ -160,7 +160,7 @@ public class PubActor : ReceiveActor {
 		});
 
 		Receive<Unsubscribe>(unsub => {
-			_subscribers.Remove(unsub.ActorRef);
+			_subscribers.Remove(unsub.IActorRef);
 		}
 	}
 }
@@ -283,7 +283,7 @@ namespace ChartApp.Actors
     /// </summary>
     public class SubscribeCounter
     {
-        public SubscribeCounter(CounterType counter, ActorRef subscriber)
+        public SubscribeCounter(CounterType counter, IActorRef subscriber)
         {
             Subscriber = subscriber;
             Counter = counter;
@@ -291,7 +291,7 @@ namespace ChartApp.Actors
 
         public CounterType Counter { get; private set; }
 
-        public ActorRef Subscriber { get; private set; }
+        public IActorRef Subscriber { get; private set; }
     }
 
     /// <summary>
@@ -299,7 +299,7 @@ namespace ChartApp.Actors
     /// </summary>
     public class UnsubscribeCounter
     {
-        public UnsubscribeCounter(CounterType counter, ActorRef subscriber)
+        public UnsubscribeCounter(CounterType counter, IActorRef subscriber)
         {
             Subscriber = subscriber;
             Counter = counter;
@@ -307,7 +307,7 @@ namespace ChartApp.Actors
 
         public CounterType Counter { get; private set; }
 
-        public ActorRef Subscriber { get; private set; }
+        public IActorRef Subscriber { get; private set; }
     }
 
     #endregion
@@ -342,14 +342,14 @@ namespace ChartApp.Actors
         private readonly Func<PerformanceCounter> _performanceCounterGenerator;
         private PerformanceCounter _counter;
 
-        private readonly HashSet<ActorRef> _subscriptions;
+        private readonly HashSet<IActorRef> _subscriptions;
         private readonly CancellationTokenSource _cancelPublishing;
 
         public PerformanceCounterActor(string seriesName, Func<PerformanceCounter> performanceCounterGenerator)
         {
             _seriesName = seriesName;
             _performanceCounterGenerator = performanceCounterGenerator;
-            _subscriptions = new HashSet<ActorRef>();
+            _subscriptions = new HashSet<IActorRef>();
             _cancelPublishing = new CancellationTokenSource();
         }
 
@@ -594,16 +594,16 @@ namespace ChartApp.Actors
 			Color = Color.DarkRed}},
         };
 
-        private Dictionary<CounterType, ActorRef> _counterActors;
+        private Dictionary<CounterType, IActorRef> _counterActors;
 
-        private ActorRef _chartingActor;
+        private IActorRef _chartingActor;
 
-        public PerformanceCounterCoordinatorActor(ActorRef chartingActor) :
-			this(chartingActor, new Dictionary<CounterType, ActorRef>())
+        public PerformanceCounterCoordinatorActor(IActorRef chartingActor) :
+			this(chartingActor, new Dictionary<CounterType, IActorRef>())
         {
         }
 
-        public PerformanceCounterCoordinatorActor(ActorRef chartingActor, Dictionary<CounterType, ActorRef> counterActors)
+        public PerformanceCounterCoordinatorActor(IActorRef chartingActor, Dictionary<CounterType, IActorRef> counterActors)
         {
             _chartingActor = chartingActor;
             _counterActors = counterActors;
@@ -683,9 +683,9 @@ namespace ChartApp.Actors
         private readonly CounterType _myCounterType;
         private bool _isToggledOn;
         private readonly Button _myButton;
-        private readonly ActorRef _coordinatorActor;
+        private readonly IActorRef _coordinatorActor;
 
-        public ButtonToggleActor(ActorRef coordinatorActor, Button myButton,
+        public ButtonToggleActor(IActorRef coordinatorActor, Button myButton,
 				CounterType myCounterType, bool isToggledOn = false)
         {
             _coordinatorActor = coordinatorActor;
@@ -887,8 +887,8 @@ Add the following declarations to the top of the `Main` class inside `Main.cs`:
 
 ```csharp
 // Main.cs - at top of Main class
-private ActorRef _coordinatorActor;
-private Dictionary<CounterType, ActorRef> _toggleActors = new Dictionary<CounterType, ActorRef>();
+private IActorRef _coordinatorActor;
+private Dictionary<CounterType, IActorRef> _toggleActors = new Dictionary<CounterType, IActorRef>();
 ```
 
 Then, replace the `Main_Load` event handler in the `Init` region so that it matches this:

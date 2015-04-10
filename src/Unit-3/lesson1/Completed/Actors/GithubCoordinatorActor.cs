@@ -27,12 +27,12 @@ namespace GithubActors.Actors
 
         public class SubscribeToProgressUpdates
         {
-            public SubscribeToProgressUpdates(ActorRef subscriber)
+            public SubscribeToProgressUpdates(IActorRef subscriber)
             {
                 Subscriber = subscriber;
             }
 
-            public ActorRef Subscriber { get; private set; }
+            public IActorRef Subscriber { get; private set; }
         }
 
         public class PublishUpdate
@@ -61,11 +61,11 @@ namespace GithubActors.Actors
 
         #endregion
 
-        private ActorRef _githubWorker;
+        private IActorRef _githubWorker;
 
         private RepoKey _currentRepo;
         private Dictionary<string, SimilarRepo> _similarRepos;
-        private HashSet<ActorRef> _subscribers;
+        private HashSet<IActorRef> _subscribers;
         private CancellationTokenSource _publishTimer;
         private GithubProgressStats _githubProgressStats;
 
@@ -97,7 +97,7 @@ namespace GithubActors.Actors
         {
             _receivedInitialUsers = false;
             _currentRepo = repo;
-            _subscribers = new HashSet<ActorRef>();
+            _subscribers = new HashSet<IActorRef>();
             _similarRepos = new Dictionary<string, SimilarRepo>();
             _publishTimer = new CancellationTokenSource();
             _githubProgressStats = new GithubProgressStats();
