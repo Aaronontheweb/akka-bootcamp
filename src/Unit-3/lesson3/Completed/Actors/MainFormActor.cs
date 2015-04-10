@@ -8,7 +8,7 @@ namespace GithubActors.Actors
     /// Actor that runs on the UI thread and handles
     /// UI events for <see cref="LauncherForm"/>
     /// </summary>
-    public class MainFormActor : ReceiveActor, WithUnboundedStash
+    public class MainFormActor : ReceiveActor, IWithUnboundedStash
     {
         #region Messages
 

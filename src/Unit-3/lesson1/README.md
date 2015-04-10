@@ -210,7 +210,7 @@ Open `Actors\GithubCommanderActor.cs` and make the following changes to the acto
 
 ```csharp
 // Actors\GithubCommanderActor.cs
-public class GithubCommanderActor : ReceiveActor, WithUnboundedStash
+public class GithubCommanderActor : ReceiveActor, IWithUnboundedStash
 ```
 
 And then add the `Stash` property to `GithubCommanderActor` somewhere

@@ -66,7 +66,7 @@ namespace GithubActors.Actors
         private RepoKey _currentRepo;
         private Dictionary<string, SimilarRepo> _similarRepos;
         private HashSet<IActorRef> _subscribers;
-        private CancellationTokenSource _publishTimer;
+        private ICancelable _publishTimer;
         private GithubProgressStats _githubProgressStats;
 
         private bool _receivedInitialUsers = false;
@@ -99,7 +99,7 @@ namespace GithubActors.Actors
             _currentRepo = repo;
             _subscribers = new HashSet<IActorRef>();
             _similarRepos = new Dictionary<string, SimilarRepo>();
-            _publishTimer = new CancellationTokenSource();
+            _publishTimer = new Cancelable(Context.System.Scheduler);
             _githubProgressStats = new GithubProgressStats();
             Become(Working);
         }
@@ -170,8 +170,8 @@ namespace GithubActors.Actors
                 //this is our first subscriber, which means we need to turn publishing on
                 if (_subscribers.Count == 0)
                 { 
-                    Context.System.Scheduler.Schedule(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100),
-                        Self, PublishUpdate.Instance, _publishTimer.Token);
+                    Context.System.Scheduler.ScheduleTellRepeatedly(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100),
+                        Self, PublishUpdate.Instance, Self, _publishTimer);
                 }
 
                 _subscribers.Add(updates.Subscriber);
