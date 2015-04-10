@@ -141,6 +141,28 @@ Second, `await` breaks the "actors process one message at a time" guarantee. By 
 
 This will turn the results of `async` operations into messages that get delivered to your actor's mailbox and you can take advantage of `Task` and other TPL methods just as you did before, and you'll enjoy nicely parallel processing!
 
+#### Update: Akka.NET v1.0 now supports `async` / `await` inside `ReceiveActor`
+
+Per the [Akka.NET v1.0 release notes](https://github.com/akkadotnet/akka.net/releases/tag/v1.0), native support for `async` and `await` is now available inside `ReceiveActor`s.
+
+```csharp
+public class MyActor : ReceiveActor
+{
+       public MyActor()
+       {
+             Receive<SomeMessage>(async some => {
+                    //we can now safely use await inside this receive handler
+                    await SomeAsyncIO(some.Data);
+                    Sender.Tell(new EverythingIsAllOK());                   
+             });
+       }
+}
+```
+
+There's some magic under the hood that takes care of this.
+
+However, the `PipeTo` pattern is still the preferred way to perform async operations inside an actor, as it is more explicit and clearly states what is going on.
+
 ### Do I need to worry about closing over (closures) my actor's internal state when using `PipeTo`?
 **Yes**, you need to close over *any state whose value might change between messages* that you need to use inside your `ContinueWith` or `PipeTo` calls.
 

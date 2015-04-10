@@ -76,7 +76,7 @@ In this case, the router's supervising actor will treat the error as an error wi
 ##### What this means in practice
 *This is about default behavior in the case of an error.*
 
-Here's what will happen, by default, if you haven't specified a `supervisorStrategy` on the pool router:
+Here's what will happen, by default, if you haven't specified a `SupervisorStrategy` on the pool router:
 
 1. A failure in a routee will bubble up to the parent of the router
 2. The parent of the router will issue a `restart` directive to the router

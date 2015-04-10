@@ -205,7 +205,7 @@ The current state of our actor hierarchy for processing GitHub repositories curr
 
 We're going to modify the `GithubCommanderActor` to use a `BroadcastGroup` router so we can run multiple jobs in parallel by the end of this lesson!
 
-### Phase 1 - Add `WithUnboundedStash` to the `GithubCommanderActor`
+### Phase 1 - Add `IWithUnboundedStash` to the `GithubCommanderActor`
 Open `Actors\GithubCommanderActor.cs` and make the following changes to the actor declaration:
 
 ```csharp
